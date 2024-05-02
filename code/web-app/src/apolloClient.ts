@@ -9,11 +9,11 @@ const httpLink = new HttpLink({
 });
 
 const authLink = setContext(async (_, { headers }) => {
-    const csrf = localStorage.getItem('csrf') || ''; // Retrieve CSRF token dynamically
+    const csrfToken = sessionStorage.getItem('csrf');
     return {
         headers: { 
             ...headers, 
-            'X-CSRF-Token': csrf,
+            'X-Curity-Csrf': csrfToken,
         }
     };
 });

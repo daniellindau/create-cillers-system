@@ -32,11 +32,18 @@ const useAuth = () => {
             await logoutFromAgent(csrf);
             setIsLoggedIn(false);
             setCsrf(null);
-            localStorage.setItem('csrf', "");
             setUserInfo(null);
             setIsLoggingOut(false);
         }
-    }, [isLoggedIn, csrf]);
+    }, [isLoggedIn]);
+
+    useEffect(() => {
+        if(!csrf) {
+            sessionStorage.removeItem('csrf');
+        } else {
+            sessionStorage.setItem('csrf', csrf);
+        }
+    }, [csrf]);
 
     // Check login state on pageload. 
     useEffect(() => { 
@@ -49,7 +56,6 @@ const useAuth = () => {
                 }
                 setIsLoggedIn(true);
                 setCsrf(loginState.csrf);
-                localStorage.setItem('csrf', loginState.csrf);
                 const userInfo = await getUserInfo(loginState.csrf); 
                 setUserInfo(userInfo); 
             }
